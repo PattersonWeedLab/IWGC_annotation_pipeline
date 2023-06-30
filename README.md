@@ -1,8 +1,10 @@
 # IWGC_annotation_pipeline
 Current annotation pipeline of the International Weed Genomics Consortium ([IWGC](https://www.weedgenomics.org/))  
-Authors: Dr. Nathan D. Hall and Dr. Eric L. Patterson
+Authors: Dr. Nathan D. Hall, Nicholas A. Johnson, and Dr. Eric L. Patterson (P.I.)
 
 ----------------
+
+# Summary of Functional Annotation
 
 ## 1. Isoform Selection
 * Isoforms are selected using [AGAT](https://github.com/NBISweden/AGAT) which 
@@ -70,3 +72,25 @@ Notes.
 ### Small Poster for Reference
 
 ![thumbnail](https://github.com/NDHall/NCWSS_2021/blob/main/media/NCWSS_poster.png)
+
+----------------
+
+# Installation
+
+## Dependencies
+The below program version numbers are the exact versions used by the current IWGC_annotation_pipeline. Different versions may also be compatible but no other versions have been verified to be compatible with this pipeline by the PattersonWeedLab.
+* [RepeatModeler](https://github.com/Dfam-consortium/RepeatModeler) (version )
+* [RepeatMasker](https://github.com/rmhubley/RepeatMasker) (version )
+* [bedtools](https://github.com/arq5x/bedtools2) (version )
+* [minimap2](https://github.com/lh3/minimap2) (version )
+* [samtools](https://github.com/samtools/samtools) (version )
+* [Cupcake](https://github.com/Magdoll/cDNA_Cupcake) (version )
+* [gffread](https://github.com/gpertea/gffread/tree/master) (version )
+* [maker](https://github.com/Yandell-Lab/maker) (version )
+* [gff3](https://pypi.org/project/gff3/) (version 1.0.1)
+* [BCBio](https://pypi.org/project/bcbio-gff/) (version 0.7.0)
+* [gfftools](https://github.com/ihh/gfftools) (version )
+* [AGAT](https://github.com/NBISweden/AGAT) (version )
+* [interproscan](https://github.com/ebi-pf-team/interproscan) (version )
+* [MMseqs2](https://github.com/soedinglab/MMseqs2) (version )
+* [MultiLoc2 Workstation Edition](https://github.com/NDHall/MultiLoc2-1/tree/workstation-edition) (version )
