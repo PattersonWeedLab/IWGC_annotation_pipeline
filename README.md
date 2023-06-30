@@ -1,5 +1,5 @@
 # IWGC_annotation_pipeline
-Current annotation pipeline of the International Weed Genomics Consortium ([IWGC](https://www.weedgenomics.org/))
+Current annotation pipeline of the International Weed Genomics Consortium ([IWGC](https://www.weedgenomics.org/)) 
 Authors: Dr. Nathan D. Hall and Dr. Eric L. Patterson
 
 ----------------
