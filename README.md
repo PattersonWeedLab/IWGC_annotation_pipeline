@@ -4,7 +4,12 @@ Authors: Dr. Nathan D. Hall and Dr. Eric L. Patterson (P.I.)
 
 ----------------
 
-# Summary of Functional Annotation
+# Summary of Annotation Pipeline
+
+## Summary of Structural Annotation
+
+
+## Summary of Functional Annotation
 
 ## 1. Isoform Selection
 * Isoforms are selected using [AGAT](https://github.com/NBISweden/AGAT) which 
@@ -79,6 +84,8 @@ Notes.
 
 ## Dependencies
 The below program version numbers are the exact versions used by the current IWGC_annotation_pipeline. Different versions may also be compatible but no other versions have been verified to be compatible with this pipeline by the PattersonWeedLab.
+
+### Structural Annotation Dependencies:
 * [RepeatModeler](https://github.com/Dfam-consortium/RepeatModeler) (version )
 * [h5py](https://github.com/h5py/h5py) (version )
 * [RepeatMasker](https://github.com/rmhubley/RepeatMasker) (version )
@@ -91,16 +98,22 @@ The below program version numbers are the exact versions used by the current IWG
 * [gff3](https://pypi.org/project/gff3/) (version 1.0.1)
 * [BCBio](https://pypi.org/project/bcbio-gff/) (version 0.7.0)
 * [gfftools](https://github.com/ihh/gfftools) (version )
+
+### Functional Annotation Dependencies:
 * [AGAT](https://github.com/NBISweden/AGAT) (version )
 * [interproscan](https://github.com/ebi-pf-team/interproscan) (version )
 * [MMseqs2](https://github.com/soedinglab/MMseqs2) (version )
 * [MultiLoc2 Workstation Edition](https://github.com/NDHall/MultiLoc2-1/tree/workstation-edition) (version )
 
+## Functional Annotation Scripts:
+`git clone `
+
 ----------------
 
 # Usage
+Genomes are first structurally annotated in terms of repeat regions and gene models. Structural annotation is then used to functionally annotate gene models.
 
-# Structural Annotation
+## Structural Annotation Usage
 
 ## 1. Handle Repeats
 ### RepeatModeler:
@@ -132,3 +145,40 @@ Prepare algnment for CupCake with samtools.
 Collapse isoforms with CupCake.  
 `python path/to/collapse_isoforms_by_sam.py --input ISOseq.fq --fq -b minimap2.sorted.bam -o output_genome_rootname`
 
+## 4. Extract Transcriptome
+### gffread:
+`gffread -w genome_name_Cupcake.transcripts.fa -g genome_name_Chromosomes.fasta genome_name.collapsed.gff`
+
+## 5. Maker
+
+## 6. Merge and Cleanup
+### 
+`global_gff="EleIndGlyRes01.gff"; printf "##gff-version 3\n" >${global_gff} ;tail -n +2   Chr*/*maker.output/*_datastore/*/*/Chr*/*gff | awk -F"\t" 'NF==9 && ($3=="gene" || $3 =="CDS" || $3 =="mRNA" || $3 =="exon" || $3 == "five_prime_UTR" || $3 == "three_prime_UTR" || $3 =="tRNA" )' >>${global_gff}`
+
+### Make first protein database to guide filtering:
+`gffread -S -y EleIndGlyRes03.prots -g Eindica_glyres.genome.fa EleIndGlyRes03.gff 
+samtools faidx EleIndGlyRes03.prots` 
+
+Pick smallest protein. 
+`sort -r -k2 -n genome_name.prots.fai | cut -f -2 | grep est2genome` 
+
+`sort -k2 -n genome_name.prots.fai | cut -f -2 | grep protein2genome | awk '$2 < 27 {print $1}' | sed 's/-mRNA-[0-9]*//' | sort | uniq > exclude_lt27.list`
+
+### Filter them out:
+Needs pip install gff3.
+`printf "##gff-version 3\n" > EleIndGlyRes03.ge27.gff ; python /data/projects/01_struc_anno/workflow/gff_filter.py -e exclude_lt27.list -g EleIndGlyRes03.gff >> EleIndGlyRes03.ge27.gff`
+
+### Make CDSs and UTRs unique:
+`python /data/projects/iwgc_annotation/workflow/keyGene/src/Key_Gene_Scripts/gffPrepare/validate_gff.py --gff EleIndGlyRes03.ge27.gff > EleIndGlyRes03.ge27_uniq.gff`
+
+### Rename:
+`python /data/projects/01_struc_anno/workflow/renameGff.py -g EleIndGlyRes03.ge27_uniq.gff -t EleInR > EleIndR02.gff`
+
+### Sort GFF:
+`/path_to/gff3sort/gff3sort.pl --precise --chr_order natural EleIndR02.gff > EleIndR02.sorted.gff`
+
+
+## Functional Annotation Usage
+
+### Functional annotation script:
+`/path_to/Functional_Annotation_v4.sh -G genome_name.genome.fa -g genome_name.sorted.gff -s EleInR -t 102 -i -n scientific_name -c common_name`
