@@ -80,6 +80,7 @@ Notes.
 ## Dependencies
 The below program version numbers are the exact versions used by the current IWGC_annotation_pipeline. Different versions may also be compatible but no other versions have been verified to be compatible with this pipeline by the PattersonWeedLab.
 * [RepeatModeler](https://github.com/Dfam-consortium/RepeatModeler) (version )
+* [h5py](https://github.com/h5py/h5py) (version )
 * [RepeatMasker](https://github.com/rmhubley/RepeatMasker) (version )
 * [bedtools](https://github.com/arq5x/bedtools2) (version )
 * [minimap2](https://github.com/lh3/minimap2) (version )
@@ -94,3 +95,40 @@ The below program version numbers are the exact versions used by the current IWG
 * [interproscan](https://github.com/ebi-pf-team/interproscan) (version )
 * [MMseqs2](https://github.com/soedinglab/MMseqs2) (version )
 * [MultiLoc2 Workstation Edition](https://github.com/NDHall/MultiLoc2-1/tree/workstation-edition) (version )
+
+----------------
+
+# Usage
+
+# Structural Annotation
+
+## 1. Handle Repeats
+### RepeatModeler:
+First build a database for RepeatModeler.
+`BuildDatabase -name genome_name path/to/genome` 
+
+Next use repeat database from last step to model repeats.
+`RepeatModeler -database genome_name -pa 25 -LTRStruct`
+
+### RepeatMasker:
+Output genome_name-families.fa from RepeatModeler used as input for RepeatMasker.
+`RepeatMasker -gff -a -pa 20 -u -lib genome_name-familes.fa path/to/genome`
+May need to load module h5py if the above fails.
+
+### bedtools:
+Output from RepeatMasker used to soft mask repeat regions in genome with bedtools.
+`bedtools maskfasta -fi path/to/genome -bed repeat_masker_out.gff -soft -fo output_genome.masked.fasta`
+
+## 2, Map Isoseq Reads to Masked Genome
+### minimap2 alignment
+`minimap2 -a -x splice -H -t 100 -O6,24 -B4 path/to/soft_masked_genome.fasta path/to/isoseq.fastq -o output.sam`
+
+## 3. Collapse Isoforms
+### samtools:
+Prepare algnment for CupCake with samtools.
+`samtools view -b -T path/to/og_genome.fasta minimap2_alignment.sam > minimap2_alignment.bam`
+
+### CupCake:
+Collapse isoforms with CupCake.
+`python path/to/collapse_isoforms_by_sam.py --input ISOseq.fq --fq -b minimap2.sorted.bam -o output_genome_rootname`
+
