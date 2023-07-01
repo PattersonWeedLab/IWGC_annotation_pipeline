@@ -182,6 +182,7 @@ Needs pip install gff3.
 
 
 ## Functional Annotation Usage
+Unlike with structural annotation, the functional annotation pipeline is completely contained within a few custom scripts. Once configured, the below command is the only one to run.
 
 ### Functional annotation script:
 `/path_to/Functional_Annotation_v4.sh -G genome_name.genome.fa -g genome_name.sorted.gff -s EleInR -t 102 -i -n scientific_name -c common_name`
