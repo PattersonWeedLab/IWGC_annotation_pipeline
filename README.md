@@ -4,6 +4,7 @@ Authors: Dr. Nathan D. Hall and Dr. Eric L. Patterson (P.I.)
 
 ----------------
 
+
 # Summary of Annotation Pipeline
 
 ## Summary of Structural Annotation
@@ -80,6 +81,7 @@ Notes.
 
 ----------------
 
+
 # Installation
 
 ## Dependencies
@@ -109,6 +111,7 @@ The below program version numbers are the exact versions used by the current IWG
 `git clone `
 
 ----------------
+
 
 # Usage
 Genomes are first structurally annotated in terms of repeat regions and gene models. Structural annotation is then used to functionally annotate gene models.
