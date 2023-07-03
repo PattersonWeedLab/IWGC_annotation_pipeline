@@ -4,6 +4,30 @@
   
 ## Summary of Structural Annotation
 
+### 1. Handling Repeats
+
+### 2, Map Isoseq Reads to Masked Genome
+#### minimap2 alignment  
+
+
+### 3. Collapse Isoforms
+#### samtools:
+Prepare algnment for CupCake with samtools.  
+
+
+#### CupCake:
+Collapse isoforms with CupCake.  
+
+
+### 4. Extract Transcriptome
+#### gffread:
+
+
+### 5. Maker
+
+### 6. Merge and Cleanup
+
+
 
 ## Summary of Functional Annotation
 
