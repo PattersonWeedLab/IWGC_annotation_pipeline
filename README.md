@@ -1,12 +1,8 @@
-# IWGC_annotation_pipeline
-Current annotation pipeline of the International Weed Genomics Consortium ([IWGC](https://www.weedgenomics.org/))  
-Authors: Dr. Nathan D. Hall and Dr. Eric L. Patterson (P.I.)
-
+# Current annotation pipeline of the International Weed Genomics Consortium ([IWGC](https://www.weedgenomics.org/))  
+Authors: Dr. Nathan D. Hall (Developer), Nicholas A. Johnson (Documentation), and Dr. Eric L. Patterson (P.I.)  
+GitHub Repo: [IWGC_annotation_pipeline](https://github.com/PattersonWeedLab/IWGC_annotation_pipeline)
 ----------------
-
-
-# Summary of Annotation Pipeline
-
+  
 ## Summary of Structural Annotation
 
 
