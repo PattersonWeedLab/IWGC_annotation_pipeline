@@ -20,7 +20,7 @@ MAKER55 480 (version 3.01.04) to predict the genomic coordinates of putative gen
 ## Summary of Structural Annotation
 
 ### 1. Handling Repeats
-* Repeat regions are annotated using RepeatModeler (versions of all programs in [Dependencies](#-Dependencies) section).
+* Repeat regions are annotated using RepeatModeler (versions of all programs in [Dependencies](#Dependencies) section).
   
 * Annotated repeat regions are masked with RepeatMasker (version 4.1.2) to reduce
   the computational burden of further analysis.
