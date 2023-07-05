@@ -4,11 +4,7 @@
 
 
 
-First, repeat regions were annotated using
-RepeatModeler (version 2.0.2) and then masked using RepeatMasker (version 4.1.2;
-http://www.repeatmasker.org) and bedtools52 473 (version 2.30.0) as a measure of data reduction before further
-annotation. IsoSeq reads were then mapped to both repeat-masked genomes using Minimap253 474 (version
-475 2.24) to determine sites of transcription. The resulting Sequence Alignment Map (SAM) files were
+ The resulting Sequence Alignment Map (SAM) files were
 converted into Binary Alignment Map (BAM) files using the SAMtools54 476 (version 1.11) view command
 477 before being collapsed using cDNA Cupcake (version 28.0; https://github.com/Magdoll/cDNA_Cupcake).
 478 The genomes, collapsed cDNA Cupcake outputs, repeat libraries from RepeatModeler and a protein
@@ -20,17 +16,20 @@ MAKER55 480 (version 3.01.04) to predict the genomic coordinates of putative gen
 ## Summary of Structural Annotation
 
 ### 1. Handling Repeats
-* Repeat regions are annotated using RepeatModeler (versions of all programs in [Dependencies](#Dependencies) section).
+* Repeat regions are annotated using RepeatModeler (links and versions of all programs in [Dependencies](#Dependencies) section).
   
-* Annotated repeat regions are masked with RepeatMasker (version 4.1.2) to reduce
+* Annotated repeat regions are masked with RepeatMasker to reduce
   the computational burden of further analysis.
 
 * bedtools (version 2.30.0) is used to soft mask the genome with the output
   of RepeatMasker.
   
 ### 2, Map Isoseq Reads to Masked Genome
-#### minimap2 alignment  
+#### minimap2 alignment
+* IsoSeq reads are mapped to the repeat-masked genome using minimap2.
 
+#### samtools sam to bam
+* samtools is used to convert the minimap2 alignment SAM file into a BAM file.
 
 ### 3. Collapse Isoforms
 #### samtools:
@@ -130,11 +129,11 @@ Notes.
 The below program version numbers are the exact versions used by the current IWGC_annotation_pipeline. Different versions may also be compatible but no other versions have been verified to be compatible with this pipeline by the PattersonWeedLab.
 
 ### Structural Annotation Dependencies:
-* [RepeatModeler](https://github.com/Dfam-consortium/RepeatModeler) (version )
+* [RepeatModeler](https://github.com/Dfam-consortium/RepeatModeler) (version 2.0.2)
 * [h5py](https://github.com/h5py/h5py) (version )
-* [RepeatMasker](https://github.com/rmhubley/RepeatMasker) (version )
-* [bedtools](https://github.com/arq5x/bedtools2) (version )
-* [minimap2](https://github.com/lh3/minimap2) (version )
+* [RepeatMasker](https://github.com/rmhubley/RepeatMasker) (version 4.1.2)
+* [bedtools](https://github.com/arq5x/bedtools2) (version 2.30.0)
+* [minimap2](https://github.com/lh3/minimap2) (version 2.24)
 * [samtools](https://github.com/samtools/samtools) (version )
 * [Cupcake](https://github.com/Magdoll/cDNA_Cupcake) (version )
 * [gffread](https://github.com/gpertea/gffread/tree/master) (version )
@@ -163,7 +162,9 @@ Genomes are first structurally annotated in terms of repeat regions and gene mod
 ### 1. Handle Repeats
 #### RepeatModeler:
 First build a database for RepeatModeler.  
-`BuildDatabase -name genome_name path/to/genome` 
+```bash
+BuildDatabase -name genome_name path/to/genome
+``` 
 
 Next use repeat database from last step to model repeats.  
 `RepeatModeler -database genome_name -pa 25 -LTRStruct`
