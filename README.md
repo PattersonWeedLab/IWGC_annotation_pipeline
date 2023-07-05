@@ -1,11 +1,33 @@
 # Current annotation pipeline of the International Weed Genomics Consortium ([IWGC](https://www.weedgenomics.org/))  
 **Authors: [Dr. Nathan D. Hall](https://github.com/NDHall) (Developer), [Nicholas A. Johnson](https://github.com/Scrumpis) (Documentation), and Dr. Eric L. Patterson (P.I.)**  
 **GitHub Repo: [IWGC_annotation_pipeline](https://github.com/PattersonWeedLab/IWGC_annotation_pipeline)**  
+
+
+
+First, repeat regions were annotated using
+RepeatModeler (version 2.0.2) and then masked using RepeatMasker (version 4.1.2;
+http://www.repeatmasker.org) and bedtools52 473 (version 2.30.0) as a measure of data reduction before further
+annotation. IsoSeq reads were then mapped to both repeat-masked genomes using Minimap253 474 (version
+475 2.24) to determine sites of transcription. The resulting Sequence Alignment Map (SAM) files were
+converted into Binary Alignment Map (BAM) files using the SAMtools54 476 (version 1.11) view command
+477 before being collapsed using cDNA Cupcake (version 28.0; https://github.com/Magdoll/cDNA_Cupcake).
+478 The genomes, collapsed cDNA Cupcake outputs, repeat libraries from RepeatModeler and a protein
+479 FASTA file from a close relative, Eleusine corocana (Phytozome genome ID: 560), were fed into
+MAKER55 480 (version 3.01.04) to predict the genomic coordinates of putative gene models. Genes that
+496 produced proteins under 32 amino acids long were removed from further annotation with only the longest
+497 proteins from each gene and unique untranslated regions (UTRs) used for functional annotation.
   
 ## Summary of Structural Annotation
 
 ### 1. Handling Repeats
+* Repeat regions are annotated using RepeatModeler (versions of all programs in [Dependencies](##-dependencies) section).
+  
+* Annotated repeat regions are masked with RepeatMasker (version 4.1.2) to reduce
+  the computational burden of further analysis.
 
+* bedtools (version 2.30.0) is used to soft mask the genome with the output
+  of RepeatMasker.
+  
 ### 2, Map Isoseq Reads to Masked Genome
 #### minimap2 alignment  
 
@@ -61,6 +83,7 @@ can be broken down into the following categories
     3. Domains
     4. Families
     5. Homologous SuperFamilies
+       
 * For more information see release notes [here](https://www.ebi.ac.uk/interpro/release_notes/84.0/)
 * IPRSCAN Results provide [MetaCyc](https://metacyc.org/) accessions but not descriptions. To obtain descriptions
 a custom python script was used to extract Pathway IDs and link them to their 
