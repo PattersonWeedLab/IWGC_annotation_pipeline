@@ -149,31 +149,31 @@ Genomes are first structurally annotated in terms of repeat regions and gene mod
 #### RepeatModeler:
 First build a database for RepeatModeler.  
 ```bash
-BuildDatabase -name genome_name path/to/genome
+BuildDatabase -name species_name genome.fasta
 ``` 
 
-Next use repeat database from last step to model repeats.  
+Next use repeat database from last step to model repeats. -pa 1 uses 4 threads, -pa 25 uses 100 threads. Adjust accordingly. 
 ```bash
-RepeatModeler -database genome_name -pa 25 -LTRStruct
+RepeatModeler -database species_name -pa 25 -LTRStruct
 ```
 
 #### RepeatMasker:
-Output genome_name-families.fa from RepeatModeler used as input for RepeatMasker.  
+Output from RepeatModeler used as input for RepeatMasker.  
 ```bash
-RepeatMasker -gff -a -pa 20 -u -lib genome_name-familes.fa path/to/genome
+RepeatMasker -gff -a -pa 20 -u -lib RepeatModeler_output-families.fa genome.fasta
 ```  
 May need to load module h5py if the above fails.
 
 #### bedtools:
 Output from RepeatMasker used to soft mask repeat regions in genome with bedtools.  
 ```bash
-bedtools maskfasta -fi path/to/genome -bed repeat_masker_out.gff -soft -fo output_genome.masked.fasta
+bedtools maskfasta -fi genome.fasta -bed RepeatMasker_output.gff -soft -fo genome.softmasked.fasta
 ```
 
 ### 2, Map Isoseq Reads to Masked Genome
 #### minimap2 alignment  
 ```bash
-minimap2 -a -x splice -H -t 100 -O6,24 -B4 path/to/soft_masked_genome.fasta path/to/isoseq.fastq -o output.sam
+minimap2 -a -x splice -H -t 100 -O6,24 -B4 genome.softmasked.fasta isoseq.fastq -o output.sam
 ```
 
 #### SAMtools
