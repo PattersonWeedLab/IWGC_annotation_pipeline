@@ -143,12 +143,12 @@ Genomes are first structurally annotated in terms of repeat regions and gene mod
 #### RepeatModeler:
 First build a database for RepeatModeler.  
 ```bash
-BuildDatabase -name species_name genome.fasta
+BuildDatabase -name Species_Name genome.fasta
 ``` 
 
 Next use repeat database from last step to model repeats. -pa 1 uses 4 threads, -pa 25 uses 100 threads. Adjust accordingly. 
 ```bash
-RepeatModeler -database species_name -pa 25 -LTRStruct
+RepeatModeler -database Species_Name -pa 25 -LTRStruct
 ```
 
 #### RepeatMasker:
@@ -173,7 +173,7 @@ minimap2 -a -x splice -H -t 100 -O6,24 -B4 genome.softmasked.fasta isoseq.fastq 
 #### SAMtools
 Prepare algnment for CupCake with samtools.
 ```bash
-samtools view -b -T path/to/og_genome.fasta minimap2_alignment.sam > minimap2_alignment.bam
+samtools view -b -T original_genome.fasta minimap2_alignment.sam > minimap2_alignment.bam
 ```
 
 ### 3. Collapse Isoforms with Cupcake
