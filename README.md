@@ -132,7 +132,7 @@ The below program version numbers are the exact versions used by the current IWG
 * [gffread](https://github.com/gpertea/gffread) (version 0.12.7)
 * [InterProScan5](https://github.com/ebi-pf-team/interproscan) (version 5.47-82.0)
 * [MMseqs2](https://github.com/soedinglab/MMseqs2) (version 4.1)
-* [MultiLoc2 Workstation Edition](https://github.com/NDHall/MultiLoc2-1/tree/workstation-edition) (version )
+* [MultiLoc2 Workstation Edition](https://github.com/NDHall/MultiLoc2-1/tree/workstation-edition) (version 2-1)
 
 ## Functional Annotation Scripts:
 `git clone `
@@ -190,6 +190,7 @@ python path/to/collapse_isoforms_by_sam.py --input ISOseq.fq --fq -b minimap2.so
 ```
 
 ### 4. Maker
+
 
 ### 5. Merge and Cleanup
 ####
