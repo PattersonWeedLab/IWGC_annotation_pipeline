@@ -1,10 +1,14 @@
 # Current annotation pipeline of the International Weed Genomics Consortium ([IWGC](https://www.weedgenomics.org/))  
-**Authors: [Dr. Nathan D. Hall](https://github.com/NDHall) (Developer), [Nicholas A. Johnson](https://github.com/Scrumpis) (Documentation), and Dr. Eric L. Patterson (P.I.)**  
+**Authors: [Dr. Nathan D. Hall](https://github.com/NDHall) (Developer), [Nicholas A. Johnson](https://github.com/Scrumpis) (Documentation & Repo), and [Dr. Eric L. Patterson](https://github.com/PattersonWeedLab) (P.I.)**  
 **GitHub Repo: [IWGC_annotation_pipeline](https://github.com/PattersonWeedLab/IWGC_annotation_pipeline)**  
 
 
 
 # Introduction
+
+## About
+This repostiory was established to document the genome annotation methods used by the [International Weed Genomics Consortium](https://www.weedgenomics.org/) and in the article "Subtelomeric 5-enolpyruvylshikimate-3-phosphate synthase copy number variation confers glyphosate resistance in Eleusine indica" and to also provide a publicly available pipeline or framework for computational genome annotation. The current state of the pipeline works well for the [Patterson Lab](https://github.com/PattersonWeedLab) but will require a substantial time investment for tweaking of small things like directory paths of files or programs and subsequent troubleshooting during the initial setup. We hope at the very least this documentation will provide researchers with a reference for designing their own genome annotation pipeline. We may attempt to release a more distributable version in the future, but there are no set plans currently.
+
   
 ## Summary of Structural Annotation
 
@@ -32,7 +36,7 @@
 * Genome, collapsed cDNA from Cupcake, repeat libraries from RepeatModeler, and a protein FASTA from a close relative species are fed into [MAKER](https://github.com/Yandell-Lab/maker).
 
 ### 5. Merge and Cleanup
-* Genes that produced proteins under 27 amino acids long were removed from further annotation with only the longest proteins from each gene and unique untranslated regions (UTRs) used for functional annotation.
+* Genes that produce proteins under 27 amino acids long are removed from further annotation with only the longest proteins from each gene and unique untranslated regions (UTRs) used for functional annotation.
 
 
 ## Summary of Functional Annotation
