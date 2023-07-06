@@ -9,30 +9,30 @@
 ## Summary of Structural Annotation
 
 ### 1. Handling Repeats
-* Repeat regions are annotated using RepeatModeler (links and versions of all programs in [Dependencies](#Dependencies) section).
+* Repeat regions are annotated using [RepeatModeler](https://github.com/Dfam-consortium/RepeatModeler) (for program versions see [Dependencies](#Dependencies)).
   
-* Annotated repeat regions are masked with RepeatMasker to reduce
+* Annotated repeat regions are masked with [RepeatMasker](https://github.com/rmhubley/RepeatMasker) to reduce
   the computational burden of further analysis.
 
-* bedtools is used to soft mask the genome using the output
+* [bedtools](https://github.com/arq5x/bedtools2) is used to soft mask the genome using the output
   of RepeatMasker.
   
 ### 2. Map Isoseq Reads to Masked Genome
 #### minimap2 alignment
-* IsoSeq reads are mapped to the repeat-masked genome using minimap2.
+* IsoSeq reads are mapped to the repeat-masked genome using [minimap2](https://github.com/lh3/minimap2).
 
 #### SAMtools SAM to BAM
-* SAMtools is used to convert the minimap2 alignment SAM file into a BAM file.
+* [SAMtools](https://github.com/samtools/samtools) is used to convert the minimap2 alignment SAM file into a BAM file.
 
 ### 3. Collapse Isoforms
-#### CupCake:
-* Isoforms are collapsed with CupCake.  
+#### Cupcake:
+* Isoforms are collapsed with [Cupcake](https://github.com/Magdoll/cDNA_Cupcake).  
 
 ### 4. Maker
-* Genome, collapsed cDNA from Cupcake, repeat libraries from RepeatModeler, and a protein FASTA from a close relative species are fed into MAKER
+* Genome, collapsed cDNA from Cupcake, repeat libraries from RepeatModeler, and a protein FASTA from a close relative species are fed into [MAKER](https://github.com/Yandell-Lab/maker).
 
 ### 5. Merge and Cleanup
-* Genes that produced proteins under 32 amino acids long were removed from further annotation with only the longest proteins from each gene and unique untranslated regions (UTRs) used for functional annotation.
+* Genes that produced proteins under 27 amino acids long were removed from further annotation with only the longest proteins from each gene and unique untranslated regions (UTRs) used for functional annotation.
 
 
 ## Summary of Functional Annotation
