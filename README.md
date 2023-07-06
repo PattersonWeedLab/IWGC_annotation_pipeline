@@ -1,5 +1,5 @@
 # Current annotation pipeline of the International Weed Genomics Consortium ([IWGC](https://www.weedgenomics.org/))  
-**Authors: [Dr. Nathan D. Hall](https://github.com/NDHall) (Developer), [Nicholas A. Johnson](https://github.com/Scrumpis) (Documentation & Repo), and [Dr. Eric L. Patterson](https://github.com/PattersonWeedLab) (P.I.)**  
+**Authors: [Dr. Nathan D. Hall](https://github.com/NDHall) (Developer), [Nicholas A. Johnson](https://github.com/Scrumpis) (Documentation & Repo), & [Dr. Eric L. Patterson](https://github.com/PattersonWeedLab) (P.I.)**  
 **GitHub Repo: [IWGC_annotation_pipeline](https://github.com/PattersonWeedLab/IWGC_annotation_pipeline)**  
 
 
@@ -184,10 +184,16 @@ samtools view -b -T original_genome.fasta minimap2_alignment.sam > minimap2_alig
 #### CupCake:
 Collapse isoforms with CupCake.
 ```bash
-python path/to/collapse_isoforms_by_sam.py --input ISOseq.fq --fq -b minimap2.sorted.bam -o output_genome_rootname
+python path/to/collapse_isoforms_by_sam.py --input ISOseq.fq --fq -b minimap2.sorted.bam -o Species_Name
 ```
 
-### 4. Maker
+### 4. MAKER (parallel run)
+This is our workaround to parallelize MAKER.
+#### Create a list of all FASTA headers to loop through
+```bash
+grep '>' genome.fasta | sed 's/>//g' > chrs.list
+```
+
 Edit maker_split_and_run.sh for your input files as shown below.
 ```bash
 #!/bin/bash 
@@ -201,9 +207,31 @@ repeat_lib="Species_Name-families.fa"
 proteins="Related_Species_Name.proteins.fa"
 ```
 
-Run maker_split_and_run.sh to separate the genome by chromosome/scaffold/contig/number of headers in fasta and run a MAKER job for each. This is our workaround to parallelize things.
+Run maker_split_and_run.sh to separate the genome into different directories by chromosome/scaffold/contig/number of headers in fasta and setup a MAKER.ctl for each.  
 ```bash
 bash maker_split_and_run.sh
+```
+
+#### maker_run.sh
+Edit the bold path in `maker_run.sh` shown below to your MAKER working directory.
+```bash
+#!/bin/bash
+module load gffread
+module load MakerP
+
+while read i
+do
+
+cd **/path/to/Species_Name/Maker/${i}**
+
+nohup maker maker_opts.ctl maker_bopts.ctl maker_exe.ctl &
+
+done < chrs.list
+```
+
+Use `maker_run.sh` to submit MAKER runs in each directory setup by `maker_split_and_run.sh`.
+```bash
+bash maker_run.sh
 ```
 
 ### 5. Merge and Cleanup
@@ -225,7 +253,7 @@ sort -r -k2 -n Species_Name.prots.fai | cut -f -2 | grep est2genome
 sort -k2 -n Species_Name.prots.fai | cut -f -2 | grep protein2genome | awk '$2 < 27 {print $1}' | sed 's/-mRNA-[0-9]*//' | sort | uniq > exclude_lt27.list`
 ```
 
-#### Filter them out:
+#### Filter out the smallest proteins:
 *Needs pip install gff3.*
 ```bash
 printf "##gff-version 3\n" > Species_Name.ge27.gff ; python /path/to/gff_filter.py -e exclude_lt27.list -g Species_Name.gff >> Species_Name.ge27.gff
