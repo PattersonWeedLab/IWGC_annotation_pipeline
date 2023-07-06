@@ -194,6 +194,10 @@ This is our workaround to parallelize MAKER.
 grep '>' genome.fasta | sed 's/>//g' > chrs.list
 ```
 
+#### maker_split_and_run.sh
+For intital setup, ensure all paths to MAKER required executables are accurate on your system in the below section.  
+`#-----Location of Executables Used by MAKER/EVALUATOR`
+  
 Edit maker_split_and_run.sh for your input files as shown below.
 ```bash
 #!/bin/bash 
