@@ -213,7 +213,7 @@ bash maker_split_and_run.sh
 ```
 
 #### maker_run.sh
-Edit the bold path in `maker_run.sh` shown below to your MAKER working directory.
+Edit the path `/path/to/Species_Name/Maker` in `maker_run.sh` shown below to your MAKER working directory.
 ```bash
 #!/bin/bash
 module load gffread
@@ -222,7 +222,7 @@ module load MakerP
 while read i
 do
 
-cd **/path/to/Species_Name/Maker/${i}**
+cd /path/to/Species_Name/Maker/${i}
 
 nohup maker maker_opts.ctl maker_bopts.ctl maker_exe.ctl &
 
