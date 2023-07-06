@@ -1,5 +1,5 @@
 # Current annotation pipeline of the International Weed Genomics Consortium ([IWGC](https://www.weedgenomics.org/))  
-**Authors: [Dr. Nathan D. Hall](https://github.com/NDHall) (Developer), [Nicholas A. Johnson](https://github.com/Scrumpis) (Documentation), & [Dr. Eric L. Patterson](https://github.com/PattersonWeedLab) (P.I.)**  
+**Authors: [Dr. Nathan D. Hall](https://github.com/NDHall) (Developer), [Nicholas A. Johnson](https://github.com/Scrumpis) (Documentation), and [Dr. Eric L. Patterson](https://github.com/PattersonWeedLab) (P.I.)**  
 **GitHub Repo: [IWGC_annotation_pipeline](https://github.com/PattersonWeedLab/IWGC_annotation_pipeline)**  
 
 
