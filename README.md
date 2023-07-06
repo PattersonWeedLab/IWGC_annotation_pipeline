@@ -47,16 +47,12 @@ selects the longest isoforms with longest intact open read frame.
 * These predicted proteins are used for all downstream analysis.
 
 ### 2. Location Prediction
-* [MultiLoc2 Workstation Edition](https://github.com/NDHall/MultiLoc2-1/tree/workstation-edition)
-  (ML2) is used predict protein location.
-within the cell. Briefly, ML2 uses a trained machine learning classifer
-  to predict protein location. For more on this program see the excellent 
-  work by [Blum et al. (2009)](https://bmcbioinformatics.biomedcentral.com/articles/10.1186/1471-2105-10-274)
+* [MultiLoc2 Workstation Edition](https://github.com/NDHall/MultiLoc2-1/tree/workstation-edition) (ML2) is used predict protein location within the cell. Briefly, ML2 uses a trained machine learning classifer to predict protein location. For more on this program see the excellent work by [Blum et al. (2009)](https://bmcbioinformatics.biomedcentral.com/articles/10.1186/1471-2105-10-274).  
 
 ### 3. InterPro Analysis
-* InterPro is run locally using iprscan5 version 5.47-82.0
-* It uses several programs to predict InterPro Accessions which 
-can be broken down into the following categories
+* InterPro is run locally using iprscan5 version 5.47-82.0.
+  
+* It uses several programs to predict InterPro Accessions which can be broken down into the following categories.
     
     1. Sites
         * Conserved Site
@@ -68,20 +64,18 @@ can be broken down into the following categories
     4. Families
     5. Homologous SuperFamilies
        
-* For more information see release notes [here](https://www.ebi.ac.uk/interpro/release_notes/84.0/)
-* IPRSCAN Results provide [MetaCyc](https://metacyc.org/) accessions but not descriptions. To obtain descriptions
-a custom python script was used to extract Pathway IDs and link them to their 
-  descriptions. MetaCyc is a proprietary database that is made conditionally available to academic researchers 
-  free of charge.
+* For more information see release notes [here](https://www.ebi.ac.uk/interpro/release_notes/84.0/).
+  
+* IPRSCAN Results provide [MetaCyc](https://metacyc.org/) accessions but not descriptions. To obtain descriptions a custom python script was used to extract Pathway IDs and link them to their descriptions. MetaCyc is a proprietary database that is made conditionally available to academic researchers free of charge.  
   
 ### 4. Homology Search
-This search is for the best hit in each database using MMSeqs2. Which is an 
-extremley fast method of searching that can be up to 36 times faster than BLAST [(Steinegger and Söding 2017)](https://www.nature.com/articles/nbt.3988).
+*This search is for the best hit in each database using MMSeqs2. Which is an extremley fast method of searching that can be up to 36 times faster than BLAST [(Steinegger and Söding 2017)](https://www.nature.com/articles/nbt.3988).  
+
 #### UniRef50
-Is a clustered database that is regularly updated. See work by [Suzek et al. (2015)](https://academic.oup.com/bioinformatics/article/31/6/926/214968).
-We used [UniRef_50 version 2021_03](https://ftp.uniprot.org/pub/databases/uniprot/previous_releases/release-2021_03/relnotes.txt)
-and downloaded representative plants from the same release to add descriptions.
-Cluster information and UniRef IDs were reported
+* UniRef50 is a clustered database that is regularly updated. See work by [Suzek et al. (2015)](https://academic.oup.com/bioinformatics/article/31/6/926/214968).
+* We use [UniRef_50 version 2021_03](https://ftp.uniprot.org/pub/databases/uniprot/previous_releases/release-2021_03/relnotes.txt) and downloaded representative plants from the same release to add descriptions.  
+Cluster information and UniRef IDs are reported
+
 #### NCBI
 All available proteins from fully sequenced plants were downloaded
 May 2021 and put into a MMeqs2 database using [NCBI Datasets](https://www.ncbi.nlm.nih.gov/datasets/) and MMSeqs2 tool
@@ -190,51 +184,70 @@ python path/to/collapse_isoforms_by_sam.py --input ISOseq.fq --fq -b minimap2.so
 ```
 
 ### 4. Maker
+Edit maker_split_and_run.sh for your input files as shown below.
+```bash
+#!/bin/bash 
+##==============================================
+## files that get modified
+genome="Species_Name.softmasked.fasta"
+cupcake="Species_Name.collapsed.gff"
+##==============================================
+## files that don't get modified
+repeat_lib="Species_Name-families.fa"
+proteins="Related_Species_Name.proteins.fa"
+```
 
+Run maker_split_and_run.sh to separate the genome by chromosome/scaffold/contig/number of headers in fasta and run a MAKER job for each. This is our workaround to parallelize things.
+```bash
+bash maker_split_and_run.sh
+```
 
 ### 5. Merge and Cleanup
-####
+#### GFF merge
+Edit Species_Name before running.
 ```bash
-global_gff="EleIndGlyRes01.gff"; printf "##gff-version 3\n" >${global_gff} ;tail -n +2   Chr*/*maker.output/*_datastore/*/*/Chr*/*gff | awk -F"\t" 'NF==9 && ($3=="gene" || $3 =="CDS" || $3 =="mRNA" || $3 =="exon" || $3 == "five_prime_UTR" || $3 == "three_prime_UTR" || $3 =="tRNA" )' >>${global_gff}
+global_gff="Species_Name.gff"; printf "##gff-version 3\n" >${global_gff} ;tail -n +2 */*maker.output/*_datastore/*/*/*/*gff | awk -F"\t" 'NF==9 && ($3=="gene" || $3 =="CDS" || $3 =="mRNA" || $3 =="exon" || $3 == "five_prime_UTR" || $3 == "three_prime_UTR" || $3 =="tRNA" )' >>${global_gff}
 ```
 
 #### Make first protein database to guide filtering:
 ```bash
-gffread -S -y EleIndGlyRes03.prots -g Eindica_glyres.genome.fa EleIndGlyRes03.gff 
-samtools faidx EleIndGlyRes03.prots
+gffread -S -y Species_Name.prots -g Species_Name.genome.fa Species_Name.gff 
+samtools faidx Species_Name.prots
 ``` 
 
 Pick smallest protein.
 ```bash
-sort -r -k2 -n genome_name.prots.fai | cut -f -2 | grep est2genome
-sort -k2 -n genome_name.prots.fai | cut -f -2 | grep protein2genome | awk '$2 < 27 {print $1}' | sed 's/-mRNA-[0-9]*//' | sort | uniq > exclude_lt27.list`
+sort -r -k2 -n Species_Name.prots.fai | cut -f -2 | grep est2genome
+sort -k2 -n Species_Name.prots.fai | cut -f -2 | grep protein2genome | awk '$2 < 27 {print $1}' | sed 's/-mRNA-[0-9]*//' | sort | uniq > exclude_lt27.list`
 ```
 
 #### Filter them out:
 *Needs pip install gff3.*
 ```bash
-printf "##gff-version 3\n" > EleIndGlyRes03.ge27.gff ; python /data/projects/01_struc_anno/workflow/gff_filter.py -e exclude_lt27.list -g EleIndGlyRes03.gff >> EleIndGlyRes03.ge27.gff
+printf "##gff-version 3\n" > Species_Name.ge27.gff ; python /path/to/gff_filter.py -e exclude_lt27.list -g Species_Name.gff >> Species_Name.ge27.gff
 ```
 
 #### Make CDSs and UTRs unique:
 ```bash
-python /data/projects/iwgc_annotation/workflow/keyGene/src/Key_Gene_Scripts/gffPrepare/validate_gff.py --gff EleIndGlyRes03.ge27.gff > EleIndGlyRes03.ge27_uniq.gff
+python /path/to/gffPrepare/validate_gff.py --gff Species_Name.ge27.gff > Species_Name.ge27_uniq.gff
 ```
 
 #### Rename:
+Used to rename gff to the Patterson Lab/IWGC common naming convention. _Eleusine indica_ = EleIn. _Eleusine indica_ glyphosate-resistant = EleInR. _Species_name_ = SpeNa.
 ```bash
-python /data/projects/01_struc_anno/workflow/renameGff.py -g EleIndGlyRes03.ge27_uniq.gff -t EleInR > EleIndR02.gff
+python /path/to/renameGff.py -g Species_Name.ge27_uniq.gff -t SpeNa > SpeNa.v2.gff
 ```
 
 #### Sort GFF:
 ```bash
-/path/to/gff3sort/gff3sort.pl --precise --chr_order natural EleIndR02.gff > EleIndR02.sorted.gff`
+/path/to/gff3sort/gff3sort.pl --precise --chr_order natural SpeNa.v2.gff > SpeNa.v2.sorted.gff`
 ```
 
 ## Functional Annotation Usage
 Unlike with structural annotation, the functional annotation pipeline is completely contained within a few custom scripts. Once configured, the below command is the only one to run.
 
 ### Functional annotation script:
+Get your species' ID from NCBI.
 ```bash
-/path/to/Functional_Annotation_v4.sh -G genome_name.genome.fa -g genome_name.sorted.gff -s EleInR -t 102 -i -n scientific_name -c common_name
+/path/to/Functional_Annotation_v4.sh -G Species_Name.genome.fa -g SpeNa.v2.sorted.gff -s SpeNa -t 102 -i NCBI_Species_Name_ID -n Scientific_Name -c Common_Name
 ```
