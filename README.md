@@ -280,10 +280,10 @@ python /path/to/renameGff.py -g Species_Name.ge27_uniq.gff -t SpeNa > SpeNa.v2.g
 ```
 
 ## Functional Annotation Usage
-Unlike with structural annotation, the functional annotation pipeline is completely contained within a few custom scripts. Once configured, the below command is the only one to run.
+Unlike with structural annotation, the functional annotation pipeline is completely contained within a few custom scripts. Config variables and functions are imported from `pipeline_config.sh`. `ml2_one_by_one.sh` is referenced by `Functional_Annotation_v4.sh`.
 
 ### Functional annotation script:
-Get your species' ID from NCBI.
+Once configured, the below command is the only one to run. Get your species' ID from NCBI.
 ```bash
 /path/to/Functional_Annotation_v4.sh -G Species_Name.genome.fa -g SpeNa.v2.sorted.gff -s SpeNa -t 102 -i NCBI_Species_Name_ID -n Scientific_Name -c Common_Name
 ```
