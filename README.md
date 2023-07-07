@@ -113,7 +113,7 @@ The below program version numbers are the exact versions used by the current IWG
 
 ### Structural Annotation Dependencies:
 * [RepeatModeler](https://github.com/Dfam-consortium/RepeatModeler) (version 2.0.2)
-* [h5py](https://github.com/h5py/h5py) (version )
+* [h5py](https://github.com/h5py/h5py) (version 2.9.0)
 * [RepeatMasker](https://github.com/rmhubley/RepeatMasker) (version 4.1.2)
 * [bedtools](https://github.com/arq5x/bedtools2) (version 2.30.0)
 * [minimap2](https://github.com/lh3/minimap2) (version 2.24)
