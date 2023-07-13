@@ -123,7 +123,7 @@ The below program version numbers are the exact versions used by the current IWG
 * [MAKER](https://github.com/Yandell-Lab/maker) (version 3.01.04)
 * [gff3](https://pypi.org/project/gff3/) (version 1.0.1)
 * [BCBio](https://pypi.org/project/bcbio-gff/) (version 0.7.0)
-* [gfftools](https://github.com/ihh/gfftools) (version )
+* [gfftools](https://github.com/ihh/gfftools) (version 0.0.4)
 
 ### Functional Annotation Dependencies:
 * [AGAT](https://github.com/NBISweden/AGAT) (version 0.8.0)
